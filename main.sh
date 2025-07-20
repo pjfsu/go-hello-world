@@ -4,13 +4,14 @@ IFS=$'\n\t'
 
 # CONSTANTS
 readonly HUB_USER="localhost"
-readonly IMAGE_VERSION="1.0.0"
+readonly APP_VERSION="1.0.0"
 readonly APP_NAME="go-hello-world"
 readonly MODULE_PATH="github.com/pjfsu/${APP_NAME}"
+readonly BUILDER_IMAGE="${HUB_USER}/${APP_NAME}-builder:${APP_VERSION}"
+readonly RUNTIME_IMAGE="${HUB_USER}/${APP_NAME}-runtime:${APP_VERSION}"
 
-readonly GO_IMAGE="docker.io/golang:1.24"
-readonly BUILDER_IMAGE="${HUB_USER}/${APP_NAME}-builder:${IMAGE_VERSION}"
-readonly RUNTIME_IMAGE="${HUB_USER}/${APP_NAME}-runtime:${IMAGE_VERSION}"
+readonly GO_VERSION="1.24"
+readonly GO_IMAGE="docker.io/golang:${GO_VERSION}"
 
 # MAIN
 main() {
@@ -37,7 +38,7 @@ ensure_go_md() {
 	if [ ! -f go.mod ]; then
 		log "Initializing Go module ..."
 		podman run --rm -v "${PWD}:/app:Z" -w /app "${GO_IMAGE}" \
-			go mod init "{MODULE_PATH}"
+			go mod init "${MODULE_PATH}"
 	fi
 }
 
@@ -61,7 +62,10 @@ build_stage() {
 		log "Skipping build of '${stage}', image '${image}' exists."
 	else
 		log "Building '${stage}' stage -> '${image}' ..."
-		podman build --target "${stage}" -t "${image}"
+		podman build \
+			--target "${stage}" \
+			--build-arg GO_IMAGE="${GO_IMAGE}" \
+			-t "${image}" ./
 	fi
 }
 

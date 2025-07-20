@@ -60,7 +60,7 @@ build_stage() {
 	if podman image exists "${image}"; then
 		log "Skipping build of '${stage}', image '${image}' exists."
 	else
-		log "Building '${stage}' stage ---> '${image}' ..."
+		log "Building '${stage}' stage -> '${image}' ..."
 		podman build --target "${stage}" -t "${image}"
 	fi
 }

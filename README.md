@@ -8,11 +8,6 @@ A minimal “Hello World” application in Go, packaged with a multi-stage Conta
 - [Repository Structure](#repository-structure)  
 - [Prerequisites](#prerequisites)  
 - [Quick Start](#quick-start)  
-- [Building & Running](#building--running)  
-  - [Using the Helper Script](#using-the-helper-script)  
-  - [Manual Container Builds](#manual-container-builds)  
-- [Customizing](#customizing)  
-- [Files Description](#files-description)  
 - [License](#license)  
 
 ## Overview
@@ -64,59 +59,12 @@ You should see:
 Hello World!
 ```
 
-## Building & Running
-
-### Using the Helper Script
-
-The `main.sh` script:
-
-1. Initializes `go.mod` if missing  
-2. Runs `go mod tidy` (and touches an empty `go.sum` if none is generated)  
-3. Builds the builder and runtime images if they don’t already exist  
-4. Launches the runtime container and prints “Hello World!”  
-
-Run:
-```bash
-./main.sh
-```
-
-### Manual Container Builds
-
-1. Initialize the **module** (creates `go.mod`):
-```bash
-podman run --rm -v "$PWD:/app:Z" -w /app docker.io/golang:1.24 \
-go mod init github.com/pjfsu/go-hello-world
-```
-
-2. **Tidy** dependencies (creates `go.sum` if third-party modules exist):
-```bash
-podman run --rm -v "$PWD":/app:Z -w /app docker.io/golang:1.24 \
-go mod tidy
-```
-
-3. Build the **builder** stage:
-```bash
-podman build --target builder \
- -t localhost/go-hello-world-builder:1.0.0 ./
-```
-4. Build the **runtime** stage:
-```bash
-podman build --target runtime \
- -t localhost/go-hello-world-runtime:1.0.0 ./
-```
-5. Run the container:
-```bash
-podman run --rm localhost/go-hello-world-runtime:1.0.0
-```
-
-## Files Description
-
-- **Containerfile**: Multi‐stage build; first compiles Go code, then packages a static binary in Alpine.  
-- **main.go**: Prints “Hello World!” using the standard library.  
-- **main.sh**: Automates module init, dependency management, image builds, and container runs.  
-- **go.mod/go.sum**: Go module metadata and checksum lockfile.  
-- **LICENSE**: GPLv3 license granted by the project author.
-
 ## License
 
 This project is licensed under the GPLv3 License. See the [LICENSE](LICENSE) file for details.
+
+## EOR (End Of Repo)
+
+### Thank you very much for visiting this repository!
+### Muchas gracias por visitar este repositorio!
+### Moitas grazas por visitar este repositorio!

@@ -8,7 +8,7 @@ readonly IMAGE_VERSION="1.0.0"
 readonly APP_NAME="go-hello-world"
 readonly MODULE_PATH="github.com/pjfsu/${APP_NAME}"
 
-readonly GO_IMAGE="docker.io/golang:1.20-alpine"
+readonly GO_IMAGE="docker.io/golang:1.24"
 readonly BUILDER_IMAGE="${HUB_USER}/${APP_NAME}-builder:${IMAGE_VERSION}"
 readonly RUNTIME_IMAGE="${HUB_USER}/${APP_NAME}-runtime:${IMAGE_VERSION}"
 

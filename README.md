@@ -88,23 +88,23 @@ podman run --rm -v "$PWD:/app:Z" -w /app docker.io/golang:1.24 \
 go mod init github.com/pjfsu/go-hello-world
 ```
 
-1. **Tidy** dependencies (creates `go.sum` if third-party modules exist):
+2. **Tidy** dependencies (creates `go.sum` if third-party modules exist):
 ```bash
 podman run --rm -v "$PWD":/app:Z -w /app docker.io/golang:1.24 \
 go mod tidy
 ```
 
-1. Build the **builder** stage:
+3. Build the **builder** stage:
 ```bash
 podman build --target builder \
  -t localhost/go-hello-world-builder:1.0.0 ./
 ```
-1. Build the **runtime** stage:
+4. Build the **runtime** stage:
 ```bash
 podman build --target runtime \
  -t localhost/go-hello-world-runtime:1.0.0 ./
 ```
-1. Run the container:
+5. Run the container:
 ```bash
 podman run --rm localhost/go-hello-world-runtime:1.0.0
 ```

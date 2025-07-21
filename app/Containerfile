@@ -6,7 +6,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY main.go ./
+COPY app.go ./
 RUN go build -o hello-world ./
 
 # RUNTIME

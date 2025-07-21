@@ -1,69 +1,88 @@
 # go-hello-world
 
-A minimal “Hello World” application in Go, packaged with a multi-stage Containerfile for lean, reproducible builds.
+A minimal “Hello World” application in Go—built and packaged **entirely** in containers using a multi-stage Containerfile. The runtime image is pushed automatically via GitHub Actions.
+
+---
 
 ## Table of Contents
 
+- [Motivation](#motivation)  
 - [Overview](#overview)  
-- [Repository Structure](#repository-structure)  
-- [Prerequisites](#prerequisites)  
-- [Quick Start](#quick-start)  
+- [Repository Layout](#repository-layout)  
+- [Building & Pushing the Runtime Image](#building--pushing-the-runtime-image)  
+- [Demo](#demo)  
 - [License](#license)  
+
+---
+
+## Motivation
+
+I created this project because I wanted to:
+
+- Experiment with the Go toolchain **only** via containers (see `app/mod.sh`).  
+- Learn and demonstrate a **multi-stage build** pattern in Containerfile (builder → runtime).  
+- Automate building **and** pushing the final runtime image using GitHub Actions.  
+
+---
 
 ## Overview
 
-This project demonstrates:
+- **Language:** Go 1.24  
+- **Container Base Images:**  
+  - Builder: `docker.io/golang:1.24`  
+  - Runtime: `alpine:3.22`  
+- **Output:**  
+  - A lean runtime image (`pjfsu/go-hello-world-runtime:latest`) containing a single binary that prints `Hello World!`.  
 
-- A simple Go program (`main.go`) that prints “Hello World!”  
-- A multi‐stage Containerfile for building with `golang:1.24` and running on `alpine:3.22`  
-- A helper shell script (`main.sh`) that automates module initialization, image builds, and container runs  
+---
 
-## Repository Structure
-
-```
-.
-├── Containerfile     # Multi-stage build definition
-├── LICENSE           # GPLv3 license
-├── go.mod            # Go module definition
-├── go.sum            # Checksums for third-party modules
-├── main.go           # Hello World Go source
-├── main.sh           # Helper script to build & run via Podman
-└── README.md         # This documentation
-```
-
-## Prerequisites
-
-- Podman (or Docker) installed and configured  
-- Bash (for `main.sh`)  
-- Internet access to pull the `golang` and `alpine` base images  
-
-## Quick Start
-
-Clone the repo and execute the helper script:
+## Repository Layout
 
 ```bash
-git clone https://github.com/pjfsu/go-hello-world.git
-cd go-hello-world
-chmod +x main.sh
-./main.sh
+.
+├── app
+│   ├── app.go              # Hello World Go source
+│   ├── go.mod              # Module definition
+│   ├── go.sum              # Dependency checksums
+│   ├── Containerfile       # Multi-stage builder → runtime
+│   └── mod.sh              # Init & tidy Go modules via container
+├── .github
+│   └── workflows
+│       └── build_push.yml  # GH Actions: build & push runtime image
+├── LICENSE                 # GPLv3
+└── README.md               # This documentation
 ```
 
-You should see:
+---
 
-```
-[12:34:56] Initializing Go module ...
-[12:34:57] Tidying Go modules (may create go.sum) ...
-[12:34:58] Building 'builder' stage -> 'localhost/go-hello-world-builder:1.0.0' ...
-[12:35:10] Building 'runtime' stage -> 'localhost/go-hello-world-runtime:1.0.0' ...
-[12:35:15] Running container from image 'localhost/go-hello-world-runtime:1.0.0' ...
+## Building & Pushing the Runtime Image
+
+This project’s GitHub Action (`.github/workflows/build_push.yml`) will:
+
+1. Log in to Docker Hub using repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`.  
+2. Build only the `runtime` stage from `app/Containerfile`.  
+3. Push the image to `docker.io/pjfsu/go-hello-world-runtime:latest`.  
+
+---
+
+## Demo
+
+```bash
+user@localhost:~$ podman run --rm go-hello-world-runtime:latest 
 Hello World!
+user@localhost:~$ podman images docker.io/pjfsu/go-hello-world-runtime:latest --format '{{.Size}}'
+10.8 MB
 ```
+
+---
 
 ## License
 
-This project is licensed under the GPLv3 License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the **GPLv3**. See the [LICENSE](LICENSE) file for details.  
 
-## EOR (End Of Repo)
+---
+
+## EOR (End Of Repository)
 
 ### Thank you very much for visiting this repository!
 ### Muchas gracias por visitar este repositorio!

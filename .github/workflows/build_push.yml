@@ -3,7 +3,7 @@ name: Build & Push Runtime Image
 on:
   push:
     branches:
-      - main
+      - build
 
 jobs:
   publish-runtime:

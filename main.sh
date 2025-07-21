@@ -25,14 +25,9 @@ main() {
 }
 
 # HELPERS
-log() { 
-	printf '[%s] %s\n' "$(date +'%H:%M:%S')" "$*"
-}
+log() { printf '[%s] %s\n' "$(date +'%H:%M:%S')" "$*"; }
 
-error() { 
-	log "ERROR: $*" >&2
-       	exit 1
-}
+error() { log "ERROR: $*" >&2; exit 1; }
 
 ensure_go_md() {
 	if [ ! -f go.mod ]; then

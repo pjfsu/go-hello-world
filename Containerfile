@@ -1,7 +1,6 @@
 # BUILDER
-ARG GO_IMAGE=docker.io/golang:1.24
 
-FROM ${GO_IMAGE} AS builder
+FROM docker.io/golang:1.24 AS builder
 WORKDIR /app
 
 COPY go.mod go.sum ./

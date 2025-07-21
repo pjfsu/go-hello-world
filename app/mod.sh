@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-readonly MODULE_PATH="github.com/pjfsu/${APP_NAME}"
+readonly MODULE_PATH="github.com/pjfsu/go-hello-world"
 readonly GO_IMAGE="docker.io/golang:1.24"
 
 [ ! -f go.mod ] && \
